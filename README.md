@@ -1,2 +1,2 @@
-# C-C-
+# Daily Coding
 C/C++ coding for ex
