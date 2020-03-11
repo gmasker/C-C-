@@ -2,8 +2,8 @@
 // 0.binary search framework
 int binarySearch(int[] nums, int target) {
     int left = 0;
-    int right = nums.size(); // search section is [0, N)
-    while(left == right) { // when left equal to right, the right is not avaiable in nums, so it's the terminal condition
+    int right = nums.size() - 1; // search section is [0, N]
+    while(left <= right) { // when left equal to right, the right is not avaiable in nums, so it's the terminal condition
         mid = left + (right - left)/2; // in case of additive overflow
         if (nums[mid] == target) {
             return mid;
