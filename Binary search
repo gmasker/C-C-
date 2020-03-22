@@ -17,20 +17,40 @@ int binarySearch(int[] nums, int target) {
 }
 
 // 1.1 binary search and find the left edge of target, initial search section [0, nums.length()) <- left close right open
+// actually, it will always check until achiving left == right condition, if nums[left] == target, the left edge found, otherwise return -1.
+// another explaination for this, the algorithm find the index how many number less than target. e.g, for array [1,2,3,4,5], target = 2; it return index 1 as result, which means only 1 element less than 2.
 int binarySearch(int[] nums, int target) {
     int left = 0;
     int right = nums.length();
-    while (left < right) { // when left = right, terminate the loop
+    while (left < right) { // when left = right, terminate the loop. In the end, it will shrink the search section to the left-most index.
         mid = left + (right - left)/2;
-        if (nums[mid] == target) {
+        if (nums[mid] == target) { // lower the right index to mid, which is not include nums[mid] because of open section [left , mid)
             right = mid;
-        } else if (nums[mid] < target ) {
+        } else if (nums[mid] < target ) { // upper the left index to mid + 1, which is include nums[mid + 1] because of close section [mid+1, right)
             left = mid + 1;
-        } else if (nums[mid] > target ) {
+        } else if (nums[mid] > target ) { // same as equal condtion
             right = mid;    
         }
     }
     if (left == nums.length())
         return -1;
     return nums[left] == target ? left : -1;
+}
+
+// 1.2 binary search and find the left edge of target, initial serach section [0, length()] <- left close right close
+// consistent with binary search solultion 0
+int binarySearch(int[] nums, int target) {
+    int left = 0;
+    int right = nums.length() - 1;
+    while(left <= right) { // the terminal condition is left == right + 1. If right == nums[mid] is the left-most target value, it still do right + 1 and will never move to left. When it terminates, left = right + 1 can cover this one.
+        mid = left + (right - left)/2;
+        if (nums[mid] == target) { // seciton change to [left , mid - 1]
+            right = mid - 1;
+        } else if (nums[mid] < target) { // section change to [mid + 1, right]
+            left = mid + 1;
+        } else if (nums[mid] > target) { // section change to [left, mid - 1]
+            right = mid - 1;
+        }
+    }
+    retun (nums[left] != target || left == nums.length() ? -1 : left; // if right never moved, left will equal to nums.length() which is out-of-bounds.
 }
