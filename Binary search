@@ -52,5 +52,61 @@ int binarySearch(int[] nums, int target) {
             right = mid - 1;
         }
     }
-    retun (nums[left] != target || left == nums.length() ? -1 : left; // if right never moved, left will equal to nums.length() which is out-of-bounds.
+    if (left == nums.length()) return -1; // if right never moved, left will equal to nums.length() which is out-of-bounds.
+    retun nums[left] == target ? left : -1; // also need check if left value equal to target.
 }
+
+// 2.1 binary search and find the right edge of target.
+// First we discuss search seciton [left, right) <- left close, right open
+int binarySerach(int[] nums, int target) {
+    int left = 0;
+    int right = nums.length();
+    while(left < right) { // terminate condition: left == right
+        mid = left + (right - left)/2;
+        if (nums[mid] == target) {
+            left = mid + 1;
+        } else if (nums[mid] < target) { // shrink section [mid + 1, right)
+            left = mid + 1;
+        } else if (nums[mid] > target) { // shrink section [left, mid)
+            right = mid;
+        }
+    }
+    if (left == 0) return -1; // cull the zero in case out of lower bounds
+    return nums[left - 1] == target ? (left - 1) : -1;  // check if left one equal to target(thinking difference between 1,2,3 find 3 and find 4) 
+}
+
+// 2.2 binary search and find the right edge of target.
+// search section [left, right] <- left close, right close
+int binarySearch(int[] nums, int target) {
+    int left = 0;
+    int right = nums.length() - 1;
+    while (left <= right) { // terminate condition: left > right
+        mid = left + (right - left)/2;
+        if (nums[mid] == target) {
+            left = mid + 1; // section [mid + 1, right]
+        } else if (nums[mid] < target) {
+            left = mid + 1; // section [mid + 1, right]
+        } else if (nums[mid] > target) {
+            right = mid - 1; // section [left, mid - 1]
+        }
+    }
+    if (right < 0) return -1;  // the right may cross zero when all values are small than target.
+    return nums[right] == target ? right : -1; // index right is the result if it's equal to target.
+}
+
+Comments:
+1. search section decide terminate conditon:
+    a. [] -> while left <= right, left > right finish
+    b. [) -> while left <  right, left = right finish
+2. search section also decide index movement:
+    a. [] -> left = mid + 1 and right = mid - 1
+    b. [) -> left = mid + 1 and right = mid
+3. find left/right edge should tighten right/left index
+    a. left edge: when nums[mid] == target, right = mid - 1 []
+    b. right edge: when nums[mid] == target, left = mid + 1 []
+4. boundary condition should consider terminated condition:
+    a. left edge: because we only return left, so only check left index boundary, do not equal to nums.length() []
+    b. right edge: because we only return right, so only check right index boundary, do not equal to -1 []
+5. return value 
+    a. left edge: if nums[left] == target, return left []
+    b. right edge: if nums[right] == target, return right []
